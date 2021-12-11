@@ -21,7 +21,7 @@ uno = Extrasense("uno")
 duo = Extrasense("duo")
 tre = Extrasense("tre")
 
-def accurcy(l1, l2 : list) -> str:
+def accuracy(l1, l2 : list) -> str:
     acc = 0
     for i, j in zip(l1, l2):
         if i == j:
