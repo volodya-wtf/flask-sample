@@ -7,7 +7,7 @@
 <body>
     {% block content %} {% endblock %}
 
-    <h1>Количество испытаний : {{ context["session_object"].fetch("count") }} </h1>
+    <h1>Количество пройденных испытаний : {{ context["session_object"].fetch("count") }} </h1>
     <h2>Прошлые результаты:</h2>
 
     {% for e in context.extrasenses %}

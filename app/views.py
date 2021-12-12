@@ -1,25 +1,27 @@
-from os import readlink
 from flask import render_template
 from flask import session
 from flask import request
 from flask import redirect
 
 from app import app
-from app import extrasense
 from app.db import SessionManager
 from app.forms import Answer
 from app.extrasense import Extrasense
 
-s = SessionManager(session)
 
 extrasenses = []
 for name in ["uno", "duo", "tre"]:
     extrasenses.append(Extrasense(name))
 
+s = SessionManager(session)
 
-@app.route("/", methods=["GET", "POST"])
+
+
+@app.route("/", methods=["GET"])
 def index():
 
+
+    # Инициализация переменных в хранилище:
     s.create("count", 0)
     s.create("user", [])
     for e in extrasenses:
@@ -43,12 +45,21 @@ def youranswer():
         # Получение пользовательского ввода
         s.append("user", int(request.form["answer"]))
 
+        # Догадки экстрасенсов:
         for e in extrasenses:
-            s.append(e.name, e.guess())
+            s.append(e.name, s.fetch(e.name+"_guess"))
+            s.assign(e.name+"_guess", None)
 
         return redirect("/")
 
     form = Answer()
+
+    
+    # Догадки экстрасенсов:
+    for e in extrasenses:
+        if s.fetch(e.name+"_guess") != None:
+            continue
+        s.assign(e.name+"_guess", e.guess())
 
     context = {
         "session_object": s,

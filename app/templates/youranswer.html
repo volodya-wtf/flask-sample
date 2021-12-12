@@ -2,6 +2,12 @@
 
 {% block content %}
 
+<h1>Докадки экстрасенсов: </h1>
+{% for e in context.extrasenses %}
+<p> {{ e.name }} : {{ context['session_object'].fetch(e.name+"_guess") }}
+{% endfor %}
+<hr>
+
 <form action="" method="post" name="form">
     <p>
         Какое число вы загадали?:<br>
@@ -9,5 +15,6 @@
     </p>
     <p><input type="submit" value="Отправить"></p>
 </form>
+<hr>
 
 {% endblock %}
