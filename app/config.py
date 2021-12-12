@@ -1,1 +1,1 @@
-SECRET_KEY = '12'
+SECRET_KEY = ''

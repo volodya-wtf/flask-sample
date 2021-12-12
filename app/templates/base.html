@@ -11,7 +11,7 @@
     <h2>Прошлые результаты:</h2>
 
     {% for e in context.extrasenses %}
-    <p> {{ e.name }} : {{ context['session_object'].fetch(e.name) }} Точность : {{ e.scores }}
+    <p> {{ e.name }} : {{ context['session_object'].fetch(e.name) }} Точность : {{ context['session_object'].fetch(e.name+"_score") }}
     {% endfor %}
 
     <p> <b>Вы</b> : {{ context['session_object'].fetch('user') }}</p>

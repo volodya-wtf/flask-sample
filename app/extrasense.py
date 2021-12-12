@@ -1,27 +1,30 @@
 import random
 
+from flask import session
+
 
 class Extrasense(object):
     def __init__(self, name):
         self.name = name
-        self.scores = 0
-        self.last = None
 
 
     def guess(self) -> int:
         return random.randrange(10, 99)
 
 
-    def accuracy(self, i: int) -> int:
-        if self.last and i != None:
-            if self.last == i:
-                self.scores += 1
-            else:
-                self.scores -= 1
+    def accuracy(self, user_last, extrasense_last, extrasense_score : int) -> int:
+        print("elast", extrasense_last)
+        print("ulast", user_last)
+        print("escore", extrasense_score)
+        if user_last and extrasense_last != None:
+            if user_last == extrasense_last:
+                extrasense_score += 1
 
-        print("self", self.last)
-        print("user", i)
-        return self.scores
+            else:
+                extrasense_score -= 1
+
+        
+        return extrasense_score
 
 
 def extrasense_factory(names: list) -> list:

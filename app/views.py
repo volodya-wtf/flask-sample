@@ -11,27 +11,25 @@ from app import extrasense
 from app.db import SessionManager
 from app.forms import Answer
 from app.extrasense import Extrasense, extrasense_factory
-from app.user import User
 
 
 s = SessionManager(session)
 
 extrasenses = extrasense_factory(names=['uno', 'duo', 'tre'])
-user = User()
 
 class Index(View):
     def __init__(self):
         s.create("count", 0)
-        s.create("user", [])
+        s.create("user", 0)
         for e in extrasenses:
             s.create(e.name, [])
+            s.create(e.name+"_score", 0)
 
     def dispatch_request(self):
         context = {
             "session_object": s,
             "title": "Тестовое задание Петров В.А.",
             "extrasenses": extrasenses,
-            "user": user,
         }
 
         return render_template("index.html", context=context)
@@ -49,7 +47,6 @@ class YourAnswer(MethodView):
             "session_object": s,
             "title": "Тестовое задание Петров В.А.",
             "extrasenses": extrasenses,
-            "user" : user
         }
 
         form = Answer()
@@ -61,20 +58,16 @@ class YourAnswer(MethodView):
         s.increment("count")
 
         # Получение пользовательского ввода
-        s.append("user", int(request.form["answer"]))
+        s.assign("user", int(request.form["answer"]))
         
-        # Запись ответа пользователя в экземпляр User 
-        user.last = int(request.form["answer"])
-        print("u", user.last)
 
         # Добавление догадок экстрасенсов в хранилище
         # Запись последнего результата в экземпляр Extrasense
         for e in extrasenses:
             s.append(e.name, s.fetch(e.name + "_guess"))
-            e.last = s.fetch(e.name + "_guess")
+            s.assign(e.name+"_score", e.accuracy(s.fetch("user"), s.fetch(e.name+"_guess"), s.fetch(e.name+"_score")))
             s.assign(e.name + "_guess", None)
-            print("e", e.last)
-            e.accuracy(user.last)
+
 
         return redirect("/")
 
