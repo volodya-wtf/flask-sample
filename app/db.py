@@ -25,13 +25,3 @@ class SessionManager:
 
     def fetch(self, key: str) -> list:
         return self.session.get(key)
-
-    def fetch_last(self, key: str):
-        fetched = list(self.session.get(key))
-        if fetched:
-            return fetched[-1]
-
-    def fetch_without_last(self, key: str):
-        fetched = list(self.session.get(key))
-        if fetched:
-            return fetched[:-1]
