@@ -6,15 +6,14 @@ from flask import redirect
 from flask.views import View, MethodView
 
 from app import app
+from app import extrasense
 from app.db import SessionManager
 from app.forms import Answer
-from app.extrasense import Extrasense
+from app.extrasense import Extrasense, extrasense_factory
 
 
 s = SessionManager(session)
-extrasenses = []
-for name in ["uno", "duo", "tre"]:
-    extrasenses.append(Extrasense(name))
+extrasenses = extrasense_factory(names=['uno', 'duo', 'tre'])
 
 
 class Index(View):
