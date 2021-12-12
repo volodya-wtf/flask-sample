@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Докадки экстрасенсов: </h1>
+<h1>Догадки экстрасенсов: </h1>
 {% for e in context.extrasenses %}
 <p> 
     {{ e.name }} : {{ context['session_object'].fetch(e.name+"_guess") }} 
