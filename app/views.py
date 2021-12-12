@@ -20,30 +20,22 @@ for name in ["uno", "duo", "tre"]:
 @app.route("/", methods=["GET", "POST"])
 def index():
 
-    def accuracy(l1, l2: list) -> str:
-        acc = 0
-        for i, j in zip(l1, l2):
-            if i == j:
-                acc += 1
-        return f"{acc}/{len(l1)}"
-    
     s.create("count", 0)
     s.create("user", [])
     for e in extrasenses:
         s.create(e.name, [])
 
     context = {
-        "count": s.fetch("count"),
+        "session_object": s,
         "title": "Тестовое задание Петров В.А.",
         "extrasenses": extrasenses,
-        "session": session,
     }
 
-    return render_template("index.html", context=context, accuracy=accuracy)
+    return render_template("index.html", context=context)
 
 
-@app.route("/form", methods=["GET", "POST"])
-def form():
+@app.route("/youranswer", methods=["GET", "POST"])
+def youranswer():
     if request.method == "POST":
         # Счетчик попыток
         s.increment("count")
@@ -52,9 +44,17 @@ def form():
         s.append("user", int(request.form["answer"]))
 
         for e in extrasenses:
-            s.append(e.name, e.oracle())
+            s.append(e.name, e.guess())
 
         return redirect("/")
 
     form = Answer()
-    return render_template("form.html", form=form)
+
+    context = {
+        "session_object": s,
+        "title": "Тестовое задание Петров В.А.",
+        "extrasenses": extrasenses,
+    }
+
+    return render_template(
+        "youranswer.html", context=context, form=form)

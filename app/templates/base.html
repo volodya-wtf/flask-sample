@@ -7,16 +7,14 @@
 <body>
     {% block content %} {% endblock %}
 
-    <h1>Количество испытаний {{ context.count }}</h1>
+    <h1>Количество испытаний : {{ context["session_object"].fetch("count") }} </h1>
     <h2>Прошлые результаты:</h2>
 
     {% for e in context.extrasenses %}
-    <p> {{ e.name }} : {{ context['session'][e.name] }} : {{ accuracy(context['session']['user'],
-        context['session'][e.name]) }}</p>
+    <p> {{ e.name }} : {{ context['session_object'].fetch(e.name) }}
     {% endfor %}
-    <p> <b>Вы</b> : {{ context['session']['user'] }}</p>
 
-
+    <p> <b>Вы</b> : {{ context['session_object'].fetch('user') }}</p>
 </body>
 
 </html>

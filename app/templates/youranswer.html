@@ -1,7 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <form action="" method="post" name="form">
     <p>
         Какое число вы загадали?:<br>
-        {{form.answer(size=80)}}<br>
+        {{form.answer(size=25)}}<br>
     </p>
     <p><input type="submit" value="Отправить"></p>
 </form>
+
+{% endblock %}
