@@ -2,15 +2,13 @@ from flask import render_template
 from flask import session
 from flask import request
 from flask import redirect
-import flask
 
 from flask.views import View, MethodView
 
 from app import app
-from app import extrasense
 from app.db import SessionManager
 from app.forms import Answer
-from app.extrasense import Extrasense, extrasense_factory
+from app.extrasense import extrasense_factory
 
 
 s = SessionManager(session)
@@ -60,9 +58,8 @@ class YourAnswer(MethodView):
         # Получение пользовательского ввода
         s.assign("user", int(request.form["answer"]))
         
-
         # Добавление догадок экстрасенсов в хранилище
-        # Запись последнего результата в экземпляр Extrasense
+        # Вычисление очков экстрасенса
         for e in extrasenses:
             s.append(e.name, s.fetch(e.name + "_guess"))
             s.assign(e.name+"_score", e.accuracy(s.fetch("user"), s.fetch(e.name+"_guess"), s.fetch(e.name+"_score")))
