@@ -16,11 +16,8 @@ for name in ["uno", "duo", "tre"]:
 s = SessionManager(session)
 
 
-
 @app.route("/", methods=["GET"])
 def index():
-
-
     # Инициализация переменных в хранилище:
     s.create("count", 0)
     s.create("user", [])
@@ -47,19 +44,18 @@ def youranswer():
 
         # Догадки экстрасенсов:
         for e in extrasenses:
-            s.append(e.name, s.fetch(e.name+"_guess"))
-            s.assign(e.name+"_guess", None)
+            s.append(e.name, s.fetch(e.name + "_guess"))
+            s.assign(e.name + "_guess", None)
 
         return redirect("/")
 
     form = Answer()
 
-    
     # Догадки экстрасенсов:
     for e in extrasenses:
-        if s.fetch(e.name+"_guess") != None:
+        if s.fetch(e.name + "_guess") != None:
             continue
-        s.assign(e.name+"_guess", e.guess())
+        s.assign(e.name + "_guess", e.guess())
 
     context = {
         "session_object": s,
@@ -67,5 +63,4 @@ def youranswer():
         "extrasenses": extrasenses,
     }
 
-    return render_template(
-        "youranswer.html", context=context, form=form)
+    return render_template("youranswer.html", context=context, form=form)

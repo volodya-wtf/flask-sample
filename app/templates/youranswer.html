@@ -4,7 +4,9 @@
 
 <h1>Докадки экстрасенсов: </h1>
 {% for e in context.extrasenses %}
-<p> {{ e.name }} : {{ context['session_object'].fetch(e.name+"_guess") }}
+<p> 
+    {{ e.name }} : {{ context['session_object'].fetch(e.name+"_guess") }} 
+</p>
 {% endfor %}
 <hr>
 
