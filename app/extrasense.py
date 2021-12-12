@@ -13,16 +13,12 @@ class Extrasense(object):
 
 
     def accuracy(self, user_last, extrasense_last, extrasense_score : int) -> int:
-        print("elast", extrasense_last)
-        print("ulast", user_last)
-        print("escore", extrasense_score)
         if user_last and extrasense_last != None:
             if user_last == extrasense_last:
                 extrasense_score += 1
 
             else:
                 extrasense_score -= 1
-
         
         return extrasense_score
 
