@@ -2,11 +2,9 @@
 
 {% block content %}
 
-<h1>Докадки экстрасенсов: </h1>
+<p>Догадки экстрасенсов: </p>
 {% for e in context.extrasenses %}
-<p> 
-    {{ e.name }} : {{ context['session_object'].fetch(e.name+"_guess") }} 
-</p>
+<p> {{ e.name }} : {{ context['session_object'].fetch(e.name+"_guess") }}
 {% endfor %}
 <hr>
 
@@ -17,6 +15,5 @@
     </p>
     <p><input type="submit" value="Отправить"></p>
 </form>
-<hr>
 
 {% endblock %}

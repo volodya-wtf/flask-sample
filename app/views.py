@@ -2,6 +2,7 @@ from flask import render_template
 from flask import session
 from flask import request
 from flask import redirect
+import flask
 
 from flask.views import View, MethodView
 
@@ -10,11 +11,13 @@ from app import extrasense
 from app.db import SessionManager
 from app.forms import Answer
 from app.extrasense import Extrasense, extrasense_factory
+from app.user import User
 
 
 s = SessionManager(session)
-extrasenses = extrasense_factory(names=['uno', 'duo', 'tre'])
 
+extrasenses = extrasense_factory(names=['uno', 'duo', 'tre'])
+user = User()
 
 class Index(View):
     def __init__(self):
@@ -28,6 +31,7 @@ class Index(View):
             "session_object": s,
             "title": "Тестовое задание Петров В.А.",
             "extrasenses": extrasenses,
+            "user": user,
         }
 
         return render_template("index.html", context=context)
@@ -45,6 +49,7 @@ class YourAnswer(MethodView):
             "session_object": s,
             "title": "Тестовое задание Петров В.А.",
             "extrasenses": extrasenses,
+            "user" : user
         }
 
         form = Answer()
@@ -57,11 +62,19 @@ class YourAnswer(MethodView):
 
         # Получение пользовательского ввода
         s.append("user", int(request.form["answer"]))
+        
+        # Запись ответа пользователя в экземпляр User 
+        user.last = int(request.form["answer"])
+        print("u", user.last)
 
-        # Добавление догадок экстрасенсов в хранилище:
+        # Добавление догадок экстрасенсов в хранилище
+        # Запись последнего результата в экземпляр Extrasense
         for e in extrasenses:
             s.append(e.name, s.fetch(e.name + "_guess"))
+            e.last = s.fetch(e.name + "_guess")
             s.assign(e.name + "_guess", None)
+            print("e", e.last)
+            e.accuracy(user.last)
 
         return redirect("/")
 
