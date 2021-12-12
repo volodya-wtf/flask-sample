@@ -5,29 +5,12 @@ from flask import request
 from flask import redirect
 
 from app import app
-
-import random
-
+from app import extrasenses
 from app.forms import Answer
 
-class Extrasense(object):
-    def __init__(self, name):
-        self.name = name
-    
-    def oracle(self):
-        return random.randrange(10,99)
-
-uno = Extrasense("uno")
-duo = Extrasense("duo")
-tre = Extrasense("tre")
-
-def accuracy(l1, l2 : list) -> str:
-    acc = 0
-    for i, j in zip(l1, l2):
-        if i == j:
-            acc += 1
-    return f'{acc}/{len(l1)}'
-
+uno = extrasenses.Extrasense("uno")
+duo = extrasenses.Extrasense("duo")
+tre = extrasenses.Extrasense("tre")
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
