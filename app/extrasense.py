@@ -8,7 +8,7 @@ class Extrasense(object):
     def guess(self):
         return random.randrange(10, 99)
 
-    def accuracy(l1, l2: list) -> str:
+    def accuracy(self, l1, l2: list) -> str:
         acc = 0
         for i, j in zip(l1, l2):
             if i == j:
