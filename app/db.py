@@ -10,6 +10,7 @@ class SessionManager:
 
     def append(self, key, value):
         fetched = self.session.get(key)
+        
         fetched.append(value)
         self.session[key] = fetched
         self.session.modified = True

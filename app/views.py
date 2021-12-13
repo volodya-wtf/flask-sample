@@ -18,7 +18,8 @@ extrasenses = extrasense_factory(names=['uno', 'duo', 'tre'])
 class Index(View):
     def __init__(self):
         s.create("count", 0)
-        s.create("user", 0)
+        s.create("user_answer", 0)
+        s.create("user", [])
         for e in extrasenses:
             s.create(e.name, [])
             s.create(e.name+"_score", 0)
@@ -56,14 +57,15 @@ class YourAnswer(MethodView):
         s.increment("count")
 
         # Получение пользовательского ввода
-        s.assign("user", int(request.form["answer"]))
+        s.assign("user_answer", int(request.form["answer"]))
+        s.append("user", s.fetch("user_answer"))
         
         # Добавление догадок экстрасенсов в хранилище
         # Вычисление очков экстрасенса
         for e in extrasenses:
             s.append(e.name, s.fetch(e.name + "_guess"))
-            s.assign(e.name+"_score", e.accuracy(s.fetch("user"), s.fetch(e.name+"_guess"), s.fetch(e.name+"_score")))
-            s.assign(e.name + "_guess", None)
+            s.assign(e.name+"_score", e.accuracy(s.fetch("user_answer"), s.fetch(e.name+"_guess"), s.fetch(e.name+"_score")))
+            s.assign(e.name +"_guess", None)
 
 
         return redirect("/")
